@@ -1,13 +1,50 @@
-<!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
+<script lang="ts">
+	let heightCm: number;
+	let weightKg: number;
+	let resultBMI: number;
 
-<div class="container h-full mx-auto flex justify-center items-center">
+	let category: any = categoryBMI();
+
+	function calculateBMI() {
+		const heightMeters: number = heightCm / 100;
+		const bmi: number = weightKg / (heightMeters * heightMeters);
+
+		resultBMI = bmi;
+
+		categoryBMI();
+	}
+
+	function categoryBMI() {
+		if (resultBMI < 18.5) {
+			category = 'You are underweight. Eat more!';
+		}
+		if (resultBMI >= 18.51 && resultBMI < 24.9) {
+			category = 'You are normal.';
+		}
+		if (resultBMI >= 24.91 && resultBMI < 29.9) {
+			category = 'You are overweight. Eat less!';
+		}
+		if (resultBMI >= 29.91) {
+			category = 'You are overweight. Eat less!';
+		}
+	}
+</script>
+
+<div class="static container h-full mx-auto flex justify-center items-center">
 	<div class="space-y-5">
-		<h1 class="h1">Let's get cracking bones!</h1>
-		<p>Start by exploring:</p>
-		<ul>
-			<li><code class="code">/src/routes/+layout.svelte</code> - barebones layout, the CSS import order is critical!</li>
-			<li><code class="code">/src/app.postcss</code> - minimal css to make the page full screen, may not be relevant for your project</li>
-			<li><code class="code">/src/routes/+page.svelte</code> - this page, you can replace the contents</li>
-		</ul>
+		<label class="label">
+			<span>Weight:</span>
+			<input bind:value={weightKg} class="input" type="text" placeholder="Weight in kg..." />
+		</label>
+		<label class="label">
+			<span>Height:</span>
+			<input bind:value={heightCm} class="input" type="text" placeholder="Height in cm..." />
+		</label>
+
+		<button on:click={calculateBMI} type="button" class="btn variant-filled">Calculate BMI</button>
+
+		{#if resultBMI && category}
+			<p>Your Body Mass Index is: {resultBMI ? resultBMI : ''}, {category ? category : ''}</p>
+		{/if}
 	</div>
 </div>
