@@ -2,30 +2,39 @@
 	let heightCm: number;
 	let weightKg: number;
 	let resultBMI: number;
+	let category: string;
 
-	let category: any = categoryBMI();
+	function buttonClick() {
+		resultBMI = calculateBMI();
+		category = categoryBMI();
+	}
 
-	function calculateBMI() {
+	function calculateBMI(): number {
 		const heightMeters: number = heightCm / 100;
 		const bmi: number = weightKg / (heightMeters * heightMeters);
 
-		resultBMI = bmi;
+		const roundedBmi = Math.round(bmi * 100) / 100;
+		resultBMI = roundedBmi;
 
-		categoryBMI();
+		if (isNaN(resultBMI) || !isFinite(resultBMI) || weightKg === 0) {
+			return NaN;
+		}
+		console.log(resultBMI);
+
+		return resultBMI;
 	}
 
-	function categoryBMI() {
-		if (resultBMI < 18.5) {
-			category = 'You are underweight. Eat more!';
-		}
-		if (resultBMI >= 18.51 && resultBMI < 24.9) {
-			category = 'You are normal.';
-		}
-		if (resultBMI >= 24.91 && resultBMI < 29.9) {
-			category = 'You are overweight. Eat less!';
-		}
-		if (resultBMI >= 29.91) {
-			category = 'You are overweight. Eat less!';
+	function categoryBMI(): string {
+		if (isNaN(resultBMI)) {
+			return 'Enter valid height and weight!';
+		} else if (resultBMI < 18.5) {
+			return 'You are underweight. Eat more!';
+		} else if (resultBMI >= 18.5 && resultBMI < 24.9) {
+			return 'You are normal.';
+		} else if (resultBMI >= 24.9 && resultBMI < 29.9) {
+			return 'You are overweight. Eat less!';
+		} else {
+			return 'You are obese. Take care of your health!';
 		}
 	}
 </script>
@@ -41,10 +50,12 @@
 			<input bind:value={heightCm} class="input" type="text" placeholder="Height in cm..." />
 		</label>
 
-		<button on:click={calculateBMI} type="button" class="btn variant-filled">Calculate BMI</button>
+		<button on:click={buttonClick} type="button" class="btn variant-filled">Calculate BMI</button>
 
 		{#if resultBMI && category}
 			<p>Your Body Mass Index is: {resultBMI ? resultBMI : ''}, {category ? category : ''}</p>
+		{:else if isNaN(resultBMI)}
+			<p>{category ? category : ''}</p>
 		{/if}
 	</div>
 </div>
