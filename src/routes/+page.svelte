@@ -14,14 +14,13 @@
 		const bmi: number = weightKg / (heightMeters * heightMeters);
 
 		const roundedBmi = Math.round(bmi * 100) / 100;
-		resultBMI = roundedBmi;
 
-		if (isNaN(resultBMI) || !isFinite(resultBMI) || weightKg === 0) {
+		if (isNaN(roundedBmi) || !isFinite(roundedBmi) || weightKg == 0) {
 			return NaN;
 		}
 		console.log(resultBMI);
 
-		return resultBMI;
+		return roundedBmi;
 	}
 
 	function categoryBMI(): string {
@@ -54,7 +53,7 @@
 
 		{#if resultBMI && category}
 			<p>Your Body Mass Index is: {resultBMI ? resultBMI : ''}, {category ? category : ''}</p>
-		{:else if isNaN(resultBMI)}
+		{:else if isNaN(resultBMI) || weightKg === 0}
 			<p>{category ? category : ''}</p>
 		{/if}
 	</div>
